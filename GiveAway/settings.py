@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'main_app'
 ]
 
 MIDDLEWARE = [
@@ -74,12 +75,12 @@ WSGI_APPLICATION = 'GiveAway.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+try:
+    from GiveAway.local_settings import DATABASES
+except ModuleNotFoundError:
+    print("Brak konfiguracji bazy danych w pliku local_settings.py!")
+    print("Uzupełnij dane i spróbuj ponownie!")
+    exit(0)
 
 
 # Password validation
@@ -106,7 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Poland'
 
 USE_I18N = True
 
