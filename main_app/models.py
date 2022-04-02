@@ -13,7 +13,7 @@ class Category(models.Model):
 
 TYPES = {
     ('foundation', 'fundacja'),
-    ('non-governmental organization',' organizacja pozarządowa'),
+    ('non-governmental organization', ' organizacja pozarządowa'),
     ('local collection', 'zbiórka lokalna')
 }
 
