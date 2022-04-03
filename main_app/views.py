@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
 from django.views import View
 from main_app.models import Donation, Institution
+from main_app.forms import RegisterForm
 from django.core.paginator import Paginator
 
 # Create your views here.
@@ -42,3 +44,15 @@ class LoginView(View):
 class RegisterView(View):
     def get(self, request):
         return render(request, 'register.html')
+
+    def post(self, request):
+        first_name = request.POST.get('name')
+        surname = request.POST.get('surname')
+        email = request.POST.get('email')
+        pass1 = request.POST.get('password')
+        pass2 = request.POST.get('password2')
+        if pass1 != pass2:
+            return render(request, 'register.html')
+        elif pass1 == pass2:
+            User.objects.create_user(username=email, password=pass1, first_name=first_name, last_name=surname, email=email)
+        return redirect('login')
