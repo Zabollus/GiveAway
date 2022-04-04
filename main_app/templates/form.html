@@ -61,7 +61,7 @@
           <div data-step="1" class="active">
             <h3>Zaznacz co chcesz oddać:</h3>
             {% for category in categories %}
-            <div class="form-group form-group--checkbox">
+            <div class="form-group form-group--checkbox" id="category">
               <label>
                 <input
                   type="checkbox"
@@ -105,7 +105,7 @@
             <h3>Wybierz organizacje, której chcesz pomóc:</h3>
 
               {% for institution in institutions %}
-            <div class="form-group form-group--checkbox">
+            <div class="form-group form-group--checkbox" id="institution" hidden>
               <label>
                 <input type="radio" name="organization" value="{{ institution.id }}" />
                 <span class="checkbox radio"></span>

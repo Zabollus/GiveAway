@@ -252,4 +252,12 @@ document.addEventListener("DOMContentLoaded", function() {
   if (form !== null) {
     new FormSteps(form);
   }
+
+  const categories = document.querySelectorAll('#category')
+  const institutions = document.querySelectorAll('#institution')
+  console.log('dupa')
+  for (category of categories) {
+    console.log(category);
+    console.log(institutions);
+  }
 });
