@@ -1,8 +1,9 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.views import View
-from main_app.models import Donation, Institution
+from main_app.models import Donation, Institution, Category
 from main_app.forms import RegisterForm
 from django.core.paginator import Paginator
 
@@ -32,9 +33,14 @@ class LandingPageView(View):
                                               'local_collections': local_collections})
 
 
-class AddDonationView(View):
+class AddDonationView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
+
     def get(self, request):
-        return render(request, 'form.html')
+        categories = Category.objects.all()
+        institutions = Institution.objects.all()
+        return render(request, 'form.html', {'categories': categories, 'institutions': institutions})
 
 
 class LoginView(View):
