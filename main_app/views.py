@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from main_app.models import Donation, Institution, Category
@@ -41,6 +42,23 @@ class AddDonationView(LoginRequiredMixin, View):
         categories = Category.objects.all()
         institutions = Institution.objects.all()
         return render(request, 'form.html', {'categories': categories, 'institutions': institutions})
+
+    def post(self, request):
+        donation = Donation.objects.create(
+            quantity=request.POST.get('bags'),
+            institution_id=request.POST.get('organization'),
+            address=request.POST.get('address'),
+            phone_number=request.POST.get('phone'),
+            city=request.POST.get('city'),
+            zip_code=request.POST.get('postcode'),
+            pick_up_date=request.POST.get('data'),
+            pick_up_time=request.POST.get('time'),
+            pick_up_comment=request.POST.get('more_info'),
+            user=request.user
+        )
+        categories = request.POST.getlist('categories')
+        donation.categories.set(categories)
+        return render(request, 'form-confirmation.html')
 
 
 class LoginView(View):
