@@ -255,9 +255,61 @@ document.addEventListener("DOMContentLoaded", function() {
 
   const categories = document.querySelectorAll('#category')
   const institutions = document.querySelectorAll('#institution')
-  console.log('dupa')
-  for (category of categories) {
-    console.log(category);
-    console.log(institutions);
-  }
+  categories.forEach(function (category) {
+    category.addEventListener('change', function () {
+      if (this.checked) {
+        institutions.forEach(function (institution) {
+          let institution_categories = Array.from(institution.firstElementChild.firstElementChild.children)
+          institution_categories.forEach(function (institution_category) {
+            if(category.value === institution_category.value) {
+            institution.removeAttribute('hidden');
+          }
+          })
+        });
+      } else {
+        institutions.forEach(function (institution) {
+          let institution_categories = Array.from(institution.firstElementChild.firstElementChild.children)
+          institution_categories.forEach(function (institution_category) {
+            if(category.value === institution_category.value) {
+            institution.setAttribute('hidden', true);
+          }
+          })
+        });
+      }
+    })
+  });
+  const summary_button = document.querySelector('#summary');
+  const bags = document.querySelector('#bags');
+  const foundation = document.querySelector('#foundation');
+  const street = document.querySelector('#street');
+  const city = document.querySelector('#city');
+  const code = document.querySelector('#code');
+  const phone = document.querySelector('#phone');
+  const date = document.querySelector('#date');
+  const time = document.querySelector('#time');
+  const comment = document.querySelector('#comment');
+  const institutions_inputs = document.querySelectorAll('#institutioninput')
+  let selected_institution = ''
+  summary_button.addEventListener('click', function () {
+    let cat_text = '';
+    categories.forEach(function (category) {
+    if (category.checked) {
+        cat_text += category.nextElementSibling.nextElementSibling.innerText + ', ';
+    }
+    })
+    bags.innerText = document.querySelector('#bagsinput').value + ' worki ' + cat_text;
+    institutions_inputs.forEach(function (institution_input) {
+      if (institution_input.checked) {
+        selected_institution = institution_input.nextElementSibling.nextElementSibling.firstElementChild.innerText
+      }
+    })
+    foundation.innerText = 'Dla ' + selected_institution
+    street.innerText = document.querySelector('#streetinput').value;
+    city.innerText = document.querySelector('#cityinput').value;
+    code.innerText = document.querySelector('#codeinput').value;
+    phone.innerText = document.querySelector('#phoneinput').value;
+    date.innerText = document.querySelector('#dateinput').value;
+    time.innerText = document.querySelector('#timeinput').value;
+    comment.innerText = document.querySelector('#commentinput').value;
+  })
 });
