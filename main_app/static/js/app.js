@@ -310,6 +310,10 @@ document.addEventListener("DOMContentLoaded", function() {
     phone.innerText = document.querySelector('#phoneinput').value;
     date.innerText = document.querySelector('#dateinput').value;
     time.innerText = document.querySelector('#timeinput').value;
+    if (document.querySelector('#commentinput').value === ''){
+      comment.innerText = 'Brak uwag'
+    } else {
     comment.innerText = document.querySelector('#commentinput').value;
+    }
   })
 });

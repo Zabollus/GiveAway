@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+          <h2>
+            Twój profil:
+          </h2>
+    </header>
+    <section class="login-page">
+        <h1>Imię: {{ user.first_name }}</h1>
+        <h1>Nazwisko: {{ user.last_name }}</h1>
+        <h1>Email: {{ user.email }}</h1>
+    </section>
+    <section class="steps--container">
+    <table>
+    <style>
+        th {width: 170px}
+        td {width: 170px;
+        text-align: center}
+    </style>
+    <thead>
+        <th><h1>Numer</h1></th>
+        <th><h1>Ilość worków</h1></th>
+        <th><h1>Organizacja</h1></th>
+        <th><h1>Kategorie</h1></th>
+        <th><h1>Data odebrania</h1></th>
+        <th><h1>Godzina odebrania</h1></th>
+        <th><h1>Status</h1></th>
+    </thead>
+    <tbody>
+    {% for donation in donations %}
+        <tr {% if donation.is_taken %}style="color: gray"{% endif %}>
+        <td><h3>{{ donation.id }}</h3></td>
+        <td><h3>{{ donation.quantity }}</h3></td>
+        <td><h3>{{ donation.institution.name }}</h3></td>
+        <td><h3>{{ donation.categories.all|join:', ' }}</h3></td>
+        <td><h3>{{ donation.pick_up_date }}</h3></td>
+        <td><h3>{{ donation.pick_up_time }}</h3></td>
+        {% if donation.is_taken %}
+        <td><h3>Odebrany</h3></td>
+        {% else %}
+            <form method="post">
+            {% csrf_token %}
+            <input name="donation_id" type="text" hidden value="{{ donation.id }}">
+        <td><button style="background-color: green" type="submit">Odbierz</button></td>
+            </form>
+        {% endif %}
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+    </section>
+{% endblock %}

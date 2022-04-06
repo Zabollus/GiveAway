@@ -97,3 +97,16 @@ class RegisterView(View):
         elif pass1 == pass2:
             User.objects.create_user(username=email, password=pass1, first_name=first_name, last_name=surname, email=email)
         return redirect('login')
+
+
+class ProfileInfoView(View):
+    def get(self, request):
+        donations = Donation.objects.all().filter(user=request.user).order_by('is_taken')
+        return render(request, 'profileinfo.html', {'donations': donations})
+
+    def post(self, request):
+        don_id = request.POST.get('donation_id')
+        don = Donation.objects.get(id=don_id)
+        don.is_taken = True
+        don.save()
+        return redirect('profile')

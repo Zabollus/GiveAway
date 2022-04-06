@@ -90,7 +90,7 @@
               <div class="subtitle">Cel i misja: {{ foundation.description }}</div>
             </div>
 
-            <div class="col"><div class="text">{% for category in foundation.categories.all %}{{ category.name }}, {% endfor %}</div></div>
+            <div class="col"><div class="text">{{ foundation.categories.all|join:', ' }}</div></div>
           </li>
             {% endfor %}
         </ul>
@@ -118,7 +118,7 @@
               <div class="subtitle">{{ organization.description }}</div>
             </div>
 
-            <div class="col"><div class="text">{% for category in organization.categories.all %}{{ category.name }}, {% endfor %}</div></div>
+            <div class="col"><div class="text">{{ organization.categories.all|join:', ' }}</div></div>
           </li>
             {% endfor %}
         </ul>
@@ -145,7 +145,7 @@
               <div class="subtitle">{{ local_collection.description }}</div>
             </div>
 
-            <div class="col"><div class="text">{% for category in local_collection.categories.all %}{{ category.name }}, {% endfor %}</div></div>
+            <div class="col"><div class="text">{{ local_collection.categories.all|join:', ' }}</div></div>
           </li>
             {% endfor %}
         </ul>
