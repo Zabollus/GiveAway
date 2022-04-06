@@ -7,6 +7,10 @@ from django.db import models
 class Category(models.Model):
     name = models.CharField(max_length=64, verbose_name='Nazwa')
 
+    class Meta:
+        verbose_name = 'Kategoria'
+        verbose_name_plural = 'Kategorie'
+
     def __str__(self):
         return self.name
 
@@ -24,6 +28,10 @@ class Institution(models.Model):
     type = models.CharField(choices=TYPES, default='foundation', max_length=32)
     categories = models.ManyToManyField(Category, verbose_name='Kategorie')
 
+    class Meta:
+        verbose_name = 'Instytucja'
+        verbose_name_plural = 'Instytucje'
+
     def __str__(self):
         return self.name
 
@@ -40,3 +48,11 @@ class Donation(models.Model):
     pick_up_time = models.TimeField(verbose_name='Godzina odebrania')
     pick_up_comment = models.TextField(verbose_name='Komentarz do przesyłki')
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, default=None)
+
+    class Meta:
+        verbose_name = 'Donacja'
+        verbose_name_plural = 'Donacje'
+
+    def __str__(self):
+        return str(self.quantity) + ' worków od ' + self.user.first_name + ' ' + self.user.last_name + ' dla ' + \
+               self.institution.name
