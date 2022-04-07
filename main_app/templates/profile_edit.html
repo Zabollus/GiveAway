@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <h2>
+        Edytuj swój profil:
+    </h2>
+    </header>
+    {% include 'messages.html' %}
+    <section class="login-page">
+      <form method="post">
+          {% csrf_token %}
+        <div class="form-group">
+            <label for="name" style="font-size: large">Imię:</label><br>
+          <input type="text" name="name" value="{{ user.first_name }}" />
+        </div>
+         <div class="form-group">
+             <label for="surname" style="font-size: large">Nazwisko:</label><br>
+          <input type="text" name="surname" value="{{ user.last_name }}" />
+        </div>
+        <div class="form-group">
+            <label for="email" style="font-size: large">Email:</label><br>
+          <input type="email" name="email" value="{{ user.email }}" />
+        </div>
+        <div class="form-group">
+            <label for="password" style="font-size: large">Podaj hasło, aby zmienić dane:</label><br>
+          <input type="password" name="password" placeholder="Hasło" />
+        </div>
+          <div class="form-group form-group--buttons">
+          <button class="btn" type="submit">Zmień dane</button>
+        </div>
+      </form>
+    </section>
+    <section class="login-page">
+    <h2>Zmień hasło</h2>
+    <form method="post" action="{% url 'password-change' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="old_password" style="font-size: large">Podaj stare hasło:</label><br>
+          <input type="password" name="old_password" placeholder="Stare hasło" />
+        </div>
+        <div class="form-group">
+            <label for="new_password" style="font-size: large">Podaj nowe hasło:</label><br>
+          <input type="password" name="new_password" placeholder="Nowe hasło" />
+        </div>
+        <div class="form-group">
+            <label for="new_password2" style="font-size: large">Powtórz nowe hasło:</label><br>
+          <input type="password" name="new_password2" placeholder="Powtórz hasło" />
+        </div>
+        <div class="form-group form-group--buttons">
+          <button class="btn" type="submit">Zmień hasło</button>
+        </div>
+    </form>
+    </section>
+{% endblock %}

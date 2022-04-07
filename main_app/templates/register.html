@@ -6,6 +6,7 @@
 
     <section class="login-page">
       <h2>Załóż konto</h2>
+        {% include 'messages.html' %}
       <form method="post">
           {% csrf_token %}
         <div class="form-group">

@@ -7,6 +7,8 @@ from django.views import View
 from main_app.models import Donation, Institution, Category
 from main_app.forms import RegisterForm
 from django.core.paginator import Paginator
+from django.contrib import messages
+from datetime import date, datetime
 
 # Create your views here.
 
@@ -70,6 +72,7 @@ class LoginView(View):
         password = request.POST.get('password')
         user = authenticate(username=email, password=password)
         if user is None:
+            messages.error(request, 'Błędny login lub hasło')
             return redirect('register')
         else:
             login(request, user)
@@ -93,6 +96,7 @@ class RegisterView(View):
         pass1 = request.POST.get('password')
         pass2 = request.POST.get('password2')
         if pass1 != pass2:
+            messages.error(request, 'Hasła muszą być takie same')
             return render(request, 'register.html')
         elif pass1 == pass2:
             User.objects.create_user(username=email, password=pass1, first_name=first_name, last_name=surname, email=email)
@@ -108,5 +112,44 @@ class ProfileInfoView(View):
         don_id = request.POST.get('donation_id')
         don = Donation.objects.get(id=don_id)
         don.is_taken = True
+        don.pick_up_date = date.today()
+        don.pick_up_time = datetime.now().strftime("%H:%M")
         don.save()
         return redirect('profile')
+
+
+class ProfileEditView(View):
+    def get(self, request):
+        return render(request, 'profile_edit.html')
+
+    def post(self, request):
+        user = authenticate(username=request.user.username, password=request.POST.get('password'))
+        if user is None:
+            messages.error(request, 'Błędne hasło')
+            return render(request, 'profile_edit.html')
+        else:
+            user.first_name = request.POST.get('name')
+            user.last_name = request.POST.get('surname')
+            user.email = request.POST.get('email')
+            user.username = request.POST.get('email')
+            user.save()
+            return redirect('profile')
+
+
+class PasswordChangeView(View):
+    def post(self, request):
+        user = authenticate(username=request.user.username, password=request.POST.get('old_password'))
+        if user is None:
+            messages.error(request, 'Błędne hasło')
+            return redirect('profile-edit')
+        else:
+            pass1 = request.POST.get('new_password')
+            pass2 = request.POST.get('new_password2')
+            if pass1 == pass2:
+                user.set_password(pass1)
+                user.save()
+                return redirect('login')
+            else:
+                messages.error(request, 'Hasła muszą być takie same')
+                return redirect('profile-edit')
+

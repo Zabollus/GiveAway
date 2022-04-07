@@ -46,7 +46,7 @@ class Donation(models.Model):
     zip_code = models.CharField(max_length=6, verbose_name='Kod pocztowy')
     pick_up_date = models.DateField(verbose_name='Data odebrania')
     pick_up_time = models.TimeField(verbose_name='Godzina odebrania')
-    pick_up_comment = models.TextField(verbose_name='Komentarz do przesyłki')
+    pick_up_comment = models.TextField(verbose_name='Komentarz do przesyłki', null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, default=None)
     is_taken = models.BooleanField(verbose_name='Odebrany', default=False)
 
