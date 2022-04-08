@@ -105,7 +105,7 @@ class RegisterView(View):
 
 class ProfileInfoView(View):
     def get(self, request):
-        donations = Donation.objects.all().filter(user=request.user).order_by('is_taken')
+        donations = Donation.objects.all().filter(user=request.user).order_by('pick_up_date').order_by('is_taken')
         return render(request, 'profileinfo.html', {'donations': donations})
 
     def post(self, request):
