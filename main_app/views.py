@@ -9,6 +9,7 @@ from main_app.forms import RegisterForm
 from django.core.paginator import Paginator
 from django.contrib import messages
 from datetime import date, datetime
+from main_app.functions import validate_password
 
 # Create your views here.
 
@@ -95,6 +96,11 @@ class RegisterView(View):
         email = request.POST.get('email')
         pass1 = request.POST.get('password')
         pass2 = request.POST.get('password2')
+        val_pas = validate_password(pass1)
+        if val_pas is None:
+            messages.error(request, 'Hasło musi mieć co najmniej 8 znaków, zawierać wielkie i małe litery, '
+                                    'cyfry i znaki specjalne')
+            return render(request, 'register.html')
         if pass1 != pass2:
             messages.error(request, 'Hasła muszą być takie same')
             return render(request, 'register.html')
@@ -145,6 +151,12 @@ class PasswordChangeView(View):
         else:
             pass1 = request.POST.get('new_password')
             pass2 = request.POST.get('new_password2')
+            val_pas = validate_password(pass1)
+            if val_pas is None:
+                messages.error(request,
+                               'Hasło musi mieć co najmniej 8 znaków, zawierać wielkie i małe litery, '
+                               'cyfry i znaki specjalne')
+                return redirect('profile-edit')
             if pass1 == pass2:
                 user.set_password(pass1)
                 user.save()
@@ -152,4 +164,3 @@ class PasswordChangeView(View):
             else:
                 messages.error(request, 'Hasła muszą być takie same')
                 return redirect('profile-edit')
-
