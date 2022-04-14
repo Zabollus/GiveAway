@@ -11,8 +11,6 @@ from django.contrib import messages
 from datetime import date, datetime
 from main_app.functions import validate_password
 
-# Create your views here.
-
 
 class LandingPageView(View):
     def get(self, request):
@@ -104,8 +102,10 @@ class RegisterView(View):
         if pass1 != pass2:
             messages.error(request, 'Hasła muszą być takie same')
             return render(request, 'register.html')
-        elif pass1 == pass2:
-            User.objects.create_user(username=email, password=pass1, first_name=first_name, last_name=surname, email=email)
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Podany email jest już zajęty')
+            return render(request, 'register.html')
+        User.objects.create_user(username=email, password=pass1, first_name=first_name, last_name=surname, email=email)
         return redirect('login')
 
 

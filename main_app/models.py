@@ -1,7 +1,17 @@
 from django.contrib.auth.models import User
 from django.db import models
+# from django.db.models.signals import pre_delete
+# from django.dispatch.dispatcher import receiver
+# from django.core.exceptions import PermissionDenied
 
 # Create your models here.
+
+#
+# @receiver(pre_delete, sender=User)
+# def delete_user(sender, instance, **kwargs):
+#     superusers = User.objects.all().filter(is_superuser=True)
+#     if len(superusers) <= 1:
+#         raise PermissionDenied
 
 
 class Category(models.Model):
