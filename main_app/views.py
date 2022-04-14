@@ -95,18 +95,23 @@ class RegisterView(View):
         pass1 = request.POST.get('password')
         pass2 = request.POST.get('password2')
         val_pas = validate_password(pass1)
+        has_error = False
         if val_pas is None:
             messages.error(request, 'Hasło musi mieć co najmniej 8 znaków, zawierać wielkie i małe litery, '
                                     'cyfry i znaki specjalne')
-            return render(request, 'register.html')
+            has_error = True
         if pass1 != pass2:
             messages.error(request, 'Hasła muszą być takie same')
-            return render(request, 'register.html')
+            has_error = True
         if User.objects.filter(email=email).exists():
             messages.error(request, 'Podany email jest już zajęty')
+            has_error = True
+        if has_error:
             return render(request, 'register.html')
-        User.objects.create_user(username=email, password=pass1, first_name=first_name, last_name=surname, email=email)
-        return redirect('login')
+        else:
+            User.objects.create_user(username=email, password=pass1, first_name=first_name, last_name=surname, email=email)
+            messages.add_message(request, messages.SUCCESS, 'Pomyślnie utworzyłeś konto. Zaloguj się poniżej')
+            return redirect('login')
 
 
 class ProfileInfoView(View):

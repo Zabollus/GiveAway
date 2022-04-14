@@ -67,9 +67,11 @@
     <script src="{% static 'js/app.js' %}"></script>
     <script>
     setTimeout(function () {
-        let monit = document.getElementById('msg');
+        let monit = document.querySelectorAll('#msg');
         if (monit) {
-            monit.remove();
+            monit.forEach(function (element) {
+                element.remove();
+            })
         }
     }, 4000)
 </script>
