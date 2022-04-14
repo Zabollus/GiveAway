@@ -10,6 +10,12 @@ from django.core.paginator import Paginator
 from django.contrib import messages
 from datetime import date, datetime
 from main_app.functions import validate_password
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
+from .utils import generate_token
+from django.core.mail import EmailMessage
 
 
 class LandingPageView(View):
@@ -109,9 +115,43 @@ class RegisterView(View):
         if has_error:
             return render(request, 'register.html')
         else:
-            User.objects.create_user(username=email, password=pass1, first_name=first_name, last_name=surname, email=email)
-            messages.add_message(request, messages.SUCCESS, 'Pomyślnie utworzyłeś konto. Zaloguj się poniżej')
+            user = User.objects.create_user(username=email, password=pass1, first_name=first_name, last_name=surname,
+                                            email=email, is_active=False)
+            current_site = get_current_site(request)
+            email_subject = 'Activate your account'
+            message = render_to_string('activate.html',
+            {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': generate_token.make_token(user)
+            })
+            activation_email = EmailMessage(
+                email_subject,
+                message,
+                'giveaway@giveaway.com',
+                [email]
+            )
+            activation_email.send()
+            messages.add_message(request, messages.SUCCESS, 'Pomyślnie utworzyłeś konto. Aby je aktywować wejdź w link '
+                                                            'wysłany na Twój adres e-mail.')
             return redirect('login')
+
+
+class ActivateView(View):
+    def get(self, request, uid64, token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uid64))
+            user = User.objects.get(pk=uid)
+        except Exception as identifier:
+            user = None
+
+        if user is not None and generate_token.check_token(user, token):
+            user.is_active = True
+            user.save()
+            messages.success(request, 'Konto aktywowane pomyślnie')
+            return redirect('login')
+        return render(request, 'activate_failed.html', status=401)
 
 
 class ProfileInfoView(View):

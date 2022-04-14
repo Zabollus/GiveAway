@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from main_app.views import LandingPageView, AddDonationView, LoginView, LogoutView, RegisterView, ProfileInfoView, \
-    ProfileEditView, PasswordChangeView
+    ProfileEditView, PasswordChangeView, ActivateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,5 +27,6 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('profile/', ProfileInfoView.as_view(), name='profile'),
     path('profile-edit/', ProfileEditView.as_view(), name='profile-edit'),
-    path('password-change/', PasswordChangeView.as_view(), name='password-change')
+    path('password-change/', PasswordChangeView.as_view(), name='password-change'),
+    path('activate/<uid64>/<token>', ActivateView.as_view(), name='activate')
 ]
