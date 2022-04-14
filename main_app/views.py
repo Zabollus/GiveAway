@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
@@ -209,3 +210,70 @@ class PasswordChangeView(View):
             else:
                 messages.error(request, 'Hasła muszą być takie same')
                 return redirect('profile-edit')
+
+
+class ResetPassword(View):
+    def get(self, request):
+        return render(request, 'forgot_password.html')
+
+    def post(self, request):
+        email = request.POST.get('email')
+        try:
+            user = User.objects.get(email=email)
+        except ObjectDoesNotExist:
+            messages.error(request, 'Konto z podanym adresem email nie istnieje.')
+            return render(request, 'forgot_password.html')
+        current_site = get_current_site(request)
+        email_subject = 'Reset your password'
+        message = render_to_string('reset_password_email.html',
+                                   {
+                                       'user': user,
+                                       'domain': current_site.domain,
+                                       'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                                       'token': generate_token.make_token(user)
+                                   })
+        reset_password_email = EmailMessage(
+            email_subject,
+            message,
+            'giveaway@giveaway.com',
+            [email]
+        )
+        reset_password_email.send()
+        return render(request, 'reset_password_confirmation.html')
+
+
+class NewPasswordView(View):
+    def get(self, request, uid64, token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uid64))
+            user = User.objects.get(pk=uid)
+        except Exception as identifier:
+            user = None
+
+        if user is not None and generate_token.check_token(user, token):
+            return render(request, 'reset_password.html')
+        return render(request, 'activate_failed.html', status=401)
+
+    def post(self, request, uid64, token):
+        pass1 = request.POST.get('new_password')
+        pass2 = request.POST.get('new_password2')
+        val_pas = validate_password(pass1)
+        if val_pas is None:
+            messages.error(request,
+                           'Hasło musi mieć co najmniej 8 znaków, zawierać wielkie i małe litery, '
+                           'cyfry i znaki specjalne')
+            return redirect('new-password', uid64=uid64, token=token)
+        if pass1 == pass2:
+            try:
+                uid = force_str(urlsafe_base64_decode(uid64))
+                user = User.objects.get(pk=uid)
+            except Exception as identifier:
+                user = None
+
+            if user is not None and generate_token.check_token(user, token):
+                user.set_password(pass1)
+                user.save()
+            return redirect('login')
+        else:
+            messages.error(request, 'Hasła muszą być takie same')
+            return redirect('new-password', uid64=uid64, token=token)
