@@ -112,7 +112,7 @@
                     {% if foundations.number == n %}
                         <a href="#help" class="btn btn--small btn--without-border active"
                            data-page="1">{{ n }}</a>
-                    {% elif n > foundations.number|add:'-5' and n < foundations.number|add:'5' %}
+                    {% else %}
                         <a href="?f_page={{ n }}#help" class="btn btn--small btn--without-border"
                            data-page="1">{{ n }}</a>
                     {% endif %}
@@ -147,7 +147,7 @@
                     {% if organizations.number == n %}
                         <a href="#help" class="btn btn--small btn--without-border active"
                            data-page="2">{{ n }}</a>
-                    {% elif n > organizations.number|add:'-5' and n < organizations.number|add:'5' %}
+                    {% else %}
                         <a href="?o_page={{ n }}#help" class="btn btn--small btn--without-border"
                            data-page="2">{{ n }}</a>
                     {% endif %}
@@ -179,7 +179,7 @@
                     {% if local_collections.number == n %}
                         <a href="#help" class="btn btn--small btn--without-border active"
                            data-page="2">{{ n }}</a>
-                    {% elif n > local_collections.number|add:'-5' and n < local_collections.number|add:'5' %}
+                    {% else %}
                         <a href="?l_page={{ n }}#help" class="btn btn--small btn--without-border"
                            data-page="2">{{ n }}</a>
                     {% endif %}
