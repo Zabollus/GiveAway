@@ -277,3 +277,27 @@ class NewPasswordView(View):
         else:
             messages.error(request, 'Hasła muszą być takie same')
             return redirect('new-password', uid64=uid64, token=token)
+
+
+class ContactMessageView(View):
+    def post(self, request):
+        name = request.POST.get('name')
+        surname = request.POST.get('surname')
+        content = request.POST.get('message')
+        email_subject = 'Wiadomość z formularza kontaktowego'
+        message = render_to_string('contact_message.html',
+                                   {
+                                       'name': name,
+                                       'surname': surname,
+                                       'content': content,
+                                   })
+        admins = User.objects.all().filter(is_superuser=True)
+        for admin in admins:
+            contact_message_email = EmailMessage(
+                email_subject,
+                message,
+                'giveaway@giveaway.com',
+                [admin.email]
+            )
+            contact_message_email.send()
+        return redirect('/')
