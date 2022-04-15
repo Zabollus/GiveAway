@@ -34,12 +34,24 @@ class LandingPageView(View):
         foundations = Institution.objects.all().filter(type='foundation')
         organizations = Institution.objects.all().filter(type='non-governmental organization')
         local_collections = Institution.objects.all().filter(type='local collection')
-        # pag_foundations = Paginator(foundations, 5)
-        # pag_organizations = Paginator(organizations, 5)
-        # pag_local_collections = Paginator(local_collections, 5)
+        pag_foundations = Paginator(foundations, 5)
+        pag_organizations = Paginator(organizations, 5)
+        pag_local_collections = Paginator(local_collections, 5)
+        foun_page = request.GET.get('fpage')
+        if foun_page is None:
+            foun_page = 1
+        orga_page = request.GET.get('opage')
+        if orga_page is None:
+            orga_page = 1
+        loccol_page = request.GET.get('lpage')
+        if loccol_page is None:
+            loccol_page = 1
+        foundations_page = pag_foundations.get_page(foun_page)
+        organizations_page = pag_organizations.get_page(orga_page)
+        local_collections_page = pag_local_collections.get_page(loccol_page)
         return render(request, 'index.html', {'all_bags': all_bags, 'supported_institutions': supported_institutions,
-                                              'foundations': foundations, 'organizations': organizations,
-                                              'local_collections': local_collections})
+                                              'foundations': foundations_page, 'organizations': organizations_page,
+                                              'local_collections': local_collections_page})
 
 
 class AddDonationView(LoginRequiredMixin, View):
@@ -121,12 +133,12 @@ class RegisterView(View):
             current_site = get_current_site(request)
             email_subject = 'Activate your account'
             message = render_to_string('activate.html',
-            {
-                'user': user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': generate_token.make_token(user)
-            })
+                                       {
+                                           'user': user,
+                                           'domain': current_site.domain,
+                                           'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                                           'token': generate_token.make_token(user)
+                                       })
             activation_email = EmailMessage(
                 email_subject,
                 message,

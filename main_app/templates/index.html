@@ -94,13 +94,11 @@
           </li>
             {% endfor %}
         </ul>
-        <!-- Pagination
         <ul class="help--slides-pagination">
-          <li><a href="#" class="btn btn--small btn--without-border active" data-page="1">1</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="2">2</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="3">3</a></li>
+            {% for item in "x"|ljust:foundations.paginator.num_pages %}
+                <li><a href="?fpage={{ forloop.counter }}" class="btn btn--small btn--without-border active" data-page="{{ forloop.counter }}">{{ forloop.counter }}</a></li>
+            {% endfor %}
         </ul>
-        -->
       </div>
 
 
@@ -122,16 +120,11 @@
           </li>
             {% endfor %}
         </ul>
-
-        <!-- Pagination
         <ul class="help--slides-pagination">
-          <li><a href="#" class="btn btn--small btn--without-border active" data-page="1">1</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="2">2</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="3">3</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="4">4</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="5">5</a></li>
+          {% for item in "x"|ljust:organizations.paginator.num_pages %}
+                <li><a href="?opage={{ forloop.counter }}" class="btn btn--small btn--without-border active" data-page="{{ forloop.counter }}">{{ forloop.counter }}</a></li>
+            {% endfor %}
         </ul>
-        -->
       </div>
 
       <!-- SLIDE 3 -->
@@ -150,12 +143,11 @@
             {% endfor %}
         </ul>
 
-        <!-- Pagination
         <ul class="help--slides-pagination">
-          <li><a href="#" class="btn btn--small btn--without-border active" data-page="1">1</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="2">2</a></li>
+          {% for item in "x"|ljust:local_collections.paginator.num_pages %}
+                <li><a href="?lpage={{ forloop.counter }}" class="btn btn--small btn--without-border active" data-page="{{ forloop.counter }}">{{ forloop.counter }}</a></li>
+            {% endfor %}
         </ul>
-        -->
       </div>
     </section>
 {% endblock %}
