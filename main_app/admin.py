@@ -15,18 +15,17 @@ class InstitutionAdmin(admin.ModelAdmin):
     list_display = ['name', indexes_of_categories]
 
 
-class UserAdmin(UserAdmin):
+class MyUserAdmin(UserAdmin):
     def has_delete_permission(self, request, obj=None):
-        super().has_delete_permission(request, obj=None)
-        superusers = User.objects.all().filter(is_superuser=True)
-        if len(superusers) <= 1:
+        if obj and ((User.objects.all().filter(is_superuser=True).count() <= 1 and obj.is_superuser) or
+                    obj.id == request.user.id):
             return False
         else:
             return True
 
 
 admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
+admin.site.register(User, MyUserAdmin)
 admin.site.register(Donation)
 admin.site.register(Category)
 admin.site.register(Institution, InstitutionAdmin)

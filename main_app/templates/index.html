@@ -96,7 +96,7 @@
         </ul>
         <ul class="help--slides-pagination">
             {% for item in "x"|ljust:foundations.paginator.num_pages %}
-                <li><a href="?fpage={{ forloop.counter }}" class="btn btn--small btn--without-border active" data-page="{{ forloop.counter }}">{{ forloop.counter }}</a></li>
+                <li><a href="?fpage={{ forloop.counter }}#help" class="btn btn--small btn--without-border active" data-page="{{ forloop.counter }}">{{ forloop.counter }}</a></li>
             {% endfor %}
         </ul>
       </div>

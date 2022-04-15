@@ -131,7 +131,7 @@ class RegisterView(View):
             user = User.objects.create_user(username=email, password=pass1, first_name=first_name, last_name=surname,
                                             email=email, is_active=False)
             current_site = get_current_site(request)
-            email_subject = 'Activate your account'
+            email_subject = 'Aktywacja konta'
             message = render_to_string('activate.html',
                                        {
                                            'user': user,
@@ -236,7 +236,7 @@ class ResetPassword(View):
             messages.error(request, 'Konto z podanym adresem email nie istnieje.')
             return render(request, 'forgot_password.html')
         current_site = get_current_site(request)
-        email_subject = 'Reset your password'
+        email_subject = 'Zresetuj swoje hasło'
         message = render_to_string('reset_password_email.html',
                                    {
                                        'user': user,
