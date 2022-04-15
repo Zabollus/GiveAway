@@ -31,19 +31,19 @@ class LandingPageView(View):
             institution_donations = institution.donation_set.all()
             if len(institution_donations) > 0:
                 supported_institutions += 1
-        foundations = Institution.objects.all().filter(type='foundation')
-        organizations = Institution.objects.all().filter(type='non-governmental organization')
-        local_collections = Institution.objects.all().filter(type='local collection')
+        foundations = Institution.objects.all().filter(type='foundation').order_by('name')
+        organizations = Institution.objects.all().filter(type='non-governmental organization').order_by('name')
+        local_collections = Institution.objects.all().filter(type='local collection').order_by('name')
         pag_foundations = Paginator(foundations, 5)
         pag_organizations = Paginator(organizations, 5)
         pag_local_collections = Paginator(local_collections, 5)
-        foun_page = request.GET.get('fpage')
+        foun_page = request.GET.get('f_page')
         if foun_page is None:
             foun_page = 1
-        orga_page = request.GET.get('opage')
+        orga_page = request.GET.get('o_page')
         if orga_page is None:
             orga_page = 1
-        loccol_page = request.GET.get('lpage')
+        loccol_page = request.GET.get('c_page')
         if loccol_page is None:
             loccol_page = 1
         foundations_page = pag_foundations.get_page(foun_page)
@@ -51,7 +51,7 @@ class LandingPageView(View):
         local_collections_page = pag_local_collections.get_page(loccol_page)
         return render(request, 'index.html', {'all_bags': all_bags, 'supported_institutions': supported_institutions,
                                               'foundations': foundations_page, 'organizations': organizations_page,
-                                              'local_collections': local_collections_page})
+                                              'local_collections': local_collections_page, 'request': request})
 
 
 class AddDonationView(LoginRequiredMixin, View):
