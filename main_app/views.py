@@ -51,7 +51,7 @@ class LandingPageView(View):
         local_collections_page = pag_local_collections.get_page(loccol_page)
         return render(request, 'index.html', {'all_bags': all_bags, 'supported_institutions': supported_institutions,
                                               'foundations': foundations_page, 'organizations': organizations_page,
-                                              'local_collections': local_collections_page, 'request': request})
+                                              'local_collections': local_collections_page})
 
 
 class AddDonationView(LoginRequiredMixin, View):
