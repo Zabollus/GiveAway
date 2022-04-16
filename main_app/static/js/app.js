@@ -298,7 +298,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 cat_text += category.nextElementSibling.nextElementSibling.innerText + ', ';
             }
         })
-        bags.innerText = document.querySelector('#bagsinput').value + ' worki ' + cat_text;
+        let bags_input = document.querySelector('#bagsinput').value
+        let bags_word = ''
+        if (bags_input == 1) {
+            bags_word = ' worek '
+        } else if ((bags_input % 10 == 2 || bags_input % 10 == 3 || bags_input % 10 == 4) && (bags_input < 10 || bags_input > 20)) {
+            bags_word = ' worki '
+        } else {
+            bags_word = ' worków '
+        }
+        bags.innerText = bags_input + bags_word + cat_text;
         institutions_inputs.forEach(function (institution_input) {
             if (institution_input.checked) {
                 selected_institution = institution_input.nextElementSibling.nextElementSibling.firstElementChild.innerText
