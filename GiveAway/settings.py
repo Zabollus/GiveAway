@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-)^z1nx7ap-^9_uh#lrfj!609#z5&jkss7+@53q6em+m@_bu$md
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost']
 
 
 # Application definition
@@ -76,13 +76,23 @@ WSGI_APPLICATION = 'GiveAway.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-try:
-    from GiveAway.local_settings import DATABASES
-except ModuleNotFoundError:
-    print("Brak konfiguracji bazy danych w pliku local_settings.py!")
-    print("Uzupełnij dane i spróbuj ponownie!")
-    exit(0)
+# try:
+#     from GiveAway.local_settings import DATABASES
+# except ModuleNotFoundError:
+#     print("Brak konfiguracji bazy danych w pliku local_settings.py!")
+#     print("Uzupełnij dane i spróbuj ponownie!")
+#     exit(0)
 
+DATABASES = {
+    'default': {
+        'HOST': 'db',
+        'PORT': 5432,
+        'NAME': 'giveaway',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
