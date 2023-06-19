@@ -1,8 +1,9 @@
 .git
 .gitignore
 .docker
-venv/
-.env/
-.venv/
-.idea/
-data/
+venv
+.env
+.venv
+.idea
+data
+**/local_settings.py
