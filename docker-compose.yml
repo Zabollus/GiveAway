@@ -2,8 +2,6 @@ version: "3.8"
 services:
   app:
     build: .
-    volumes:
-      - .:/giveaway
     ports:
       - 8000:8000
     image: app:giveaway
