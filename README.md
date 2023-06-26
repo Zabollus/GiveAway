@@ -23,13 +23,11 @@ Application should be available at port 8000.
 To test application you can create new account or use these credentials:
 
 login: pawe.leszek@gmail.com
-
 password: qwertY12!
 
 To get access to admin panel you can use these credentials:
 
 login: worker@worker.com
-
 password: work1234
 
 E-mails to activate account or reset password will show up in console.
