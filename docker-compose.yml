@@ -17,8 +17,8 @@ services:
   db:
     image: postgres:alpine
     restart: always
-    volumes:
-      - ./data/db:/var/lib/postgresql/data
+#    volumes:
+#      - ./data/db:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=giveaway
       - POSTGRES_USER=postgres
